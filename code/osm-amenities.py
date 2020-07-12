@@ -56,13 +56,13 @@ def main(inputs, output):
     lines = sc.textFile(inputs)
     nodes = lines.flatMap(get_amenities)
     amenities = spark.createDataFrame(nodes, schema=amenity_schema)
-    amenities = amenities.cache()
     # work around Python to Spark datetime conversion problems
     amenities = amenities.select(
         'lat', 'lon',
         functions.from_unixtime(amenities['unix_time']).alias('timestamp'),
         'amenity', 'name', 'tags'
     )
+    amenities = amenities.cache()
     amenities.write.json(output, mode='overwrite', compression='gzip')
     amenities.write.parquet(output + '-parquet', mode='overwrite', compression='lz4')
 
