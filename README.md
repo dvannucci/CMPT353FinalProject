@@ -10,3 +10,68 @@ To run the geolocating based on coordinates, need to install geopy which will al
 
 pip3 install geopy
 pip3 install shapely
+
+amenities notes:
+
+-main transportation (car, public, biking):
+car sharing
+bicycle repair
+car rental
+bus station
+car sharing
+fuel
+parking space
+
+-Nightlife:
+pub/bar
+restaurant
+nightclub
+strip club
+gambling
+casino
+lounge
+smoking area
+events venue
+
+-Outdoor/fitness:
+gyms
+parks
+training
+community centre
+
+-activities:
+theatre
+restaurant
+cinema
+parks
+events venue
+observation platform
+
+-leisure
+lounge
+cafe
+spa
+meditiation centre
+library
+
+-family life:
+school
+kindergarden
+family centre
+music school
+playground
+park
+marketplace
+childcare
+library
+
+-pet owner
+vet
+parks
+
+-safety:
+hospital
+police
+fire station
+doctors
+healthcare
