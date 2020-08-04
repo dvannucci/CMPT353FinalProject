@@ -2,7 +2,7 @@
 
 OSM data project
 
-Testing.py can be run by: spark-submit testing.py amenities-vancouver.json.gz output
+01-CleanBlockOutlines.py can be run by: spark-submit 01-CleanBlockOutlines.py block-outlines.json cleanedBlocks
 
 Just a test file that prints out all distinct amenities and has a few comments to how we can select certain tags for data processing.
 
