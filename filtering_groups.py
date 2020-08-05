@@ -48,6 +48,15 @@ def main():
     print("List of values in neighbourhood: \n(nightlife, fitness, activities, leisure, family, pets, safety)")
     listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety']
     
+    # added column type to specify value type to select dataframe more easily
+    nightlife['type'] = 'nightlife'
+    fitness['type'] = 'fitness'
+    activities['type'] = 'activities'
+    leisure['type'] = 'leisure'
+    family['type'] = 'family'
+    pets['type'] = 'pets'
+    safety['type'] = 'safety'
+    
     value1 = input("Enter first value: ")
     value2 = input("Enter second value: ")
     value3 = input("Enter third value: ")
@@ -68,50 +77,15 @@ def main():
     
     # conditions for reading inputs and selecting the dataframe for that specific input/value
     
-    if(value1 == 'nightlife'):
-        firstdf = nightlife
-    elif(value1 == 'fitness'):
-        firstdf = fitness
-    elif(value1 == 'activities'):
-        firstdf = activities
-    elif(value1 == 'leisure'):
-        firstdf = leisure
-    elif(value1 == 'family'):
-        firstdf = family
-    elif(value1 == 'pets'):
-        firstdf = pets
-    else:
-        firstdf = safety
-        
-    if(value2 == 'nightlife'):
-        seconddf = nightlife
-    elif(value2 == 'fitness'):
-        seconddf = fitness
-    elif(value2 == 'activities'):
-        seconddf = activities
-    elif(value2 == 'leisure'):
-        seconddf = leisure
-    elif(value2 == 'family'):
-        seconddf = family
-    elif(value2 == 'pets'):
-        seconddf = pets
-    else:
-        seconddf = safety
-        
-    if(value3 == 'nightlife'):
-        thirddf = nightlife
-    elif(value3 == 'fitness'):
-        thirddf = fitness
-    elif(value3 == 'activities'):
-        thirddf = activities
-    elif(value3 == 'leisure'):
-        thirddf = leisure
-    elif(value3 == 'family'):
-        thirddf = family
-    elif(value3 == 'pets'):
-        thirddf = pets
-    else:
-        thirddf = safety
+   allvals = pd.concat([nightlife,fitness,activities,leisure,family,pets,safety])
+
+    for x in listofvalues:
+        if value1 == x:
+            firstdf = allvals[allvals['type'] == x]
+        if value2 == x:
+            seconddf = allvals[allvals['type'] == x]
+        if value3 == x:
+            thirddf = allvals[allvals['type'] == x]
     
     # merged the 3 dataframes of the 3 values chosen by user
     
@@ -121,7 +95,7 @@ def main():
     group = group[(group['lat']>= 49.2 )&(group['lat'] <= 49.3) & (group['lon'] >= -123.225 )&(group['lon'] <= -123.025)]
     
     # adapted from https://medium.com/python-in-plain-english/mapping-with-pythons-geopandas-2869bb758b08
-
+    # data from https://opendata.vancouver.ca/pages/home/
     bnd_gdf = gpd.read_file('boundary/local-area-boundary.shp')
     ps_gdf = gpd.read_file('public-streets/public-streets.shp')
     
