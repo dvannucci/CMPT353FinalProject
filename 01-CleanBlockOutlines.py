@@ -1,7 +1,6 @@
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
 from pyspark.sql import SparkSession, functions, types, Row
-from pyspark.sql.window import Window
 
 from geopy.geocoders import Nominatim
 from shapely.geometry import Polygon
@@ -87,7 +86,7 @@ def main(inputs, output):
 if __name__ == '__main__':
     inputs = sys.argv[1]
     output = sys.argv[2]
-    spark = SparkSession.builder.appName('example code').getOrCreate()
+    spark = SparkSession.builder.appName('Clean Blocks').getOrCreate()
     assert spark.version >= '2.4' # make sure we have Spark 2.4+
     spark.sparkContext.setLogLevel('WARN')
     #sc = spark.sparkContext
