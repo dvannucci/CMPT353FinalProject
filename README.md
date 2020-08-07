@@ -2,14 +2,17 @@
 
 OSM data project
 
-01-CleanBlockOutlines.py can be run by: spark-submit 01-CleanBlockOutlines.py block-outlines.json cleanedBlocks
+Files and how to run them:
 
-Just a test file that prints out all distinct amenities and has a few comments to how we can select certain tags for data processing.
+-01-CleanBlockOutlines.py can be run by: spark-submit 01-CleanBlockOutlines.py block-outlines.json output : Was used to create the directory cleanedBlocks.
 
-To run the geolocating based on coordinates, need to install geopy which will allow us to go from coordinates to addresses. To find the representative point of each block section, we must also install shapely.
+02-blockDataCoalesceZip.py can be run by: spark-submit 02-blockDataCoalesceZip.py cleanedBlocks output : was used to create the directory CoalescedBlocks.
+
+Required Packages:
 
 pip3 install geopy
 pip3 install shapely
+pip3 install geopandas
 
 amenities notes:
 
