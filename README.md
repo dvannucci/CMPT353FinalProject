@@ -4,9 +4,13 @@ OSM data project
 
 Files and how to run them:
 
--01-CleanBlockOutlines.py can be run by: spark-submit 01-CleanBlockOutlines.py block-outlines.json output : Was used to create the directory cleanedBlocks.
+-01-clean_block_outlines.py can be run by: spark-submit 01-clean_block_outlines.py block-outlines.json output : Was used to create the directory cleanedBlocks.
 
-02-blockDataCoalesceZip.py can be run by: spark-submit 02-blockDataCoalesceZip.py cleanedBlocks output : was used to create the directory CoalescedBlocks.
+-02-block_data_coalesce_zip.py can be run by: spark-submit 02-block_data_coalesce_zip.py cleanedBlocks output : was used to create the directory CoalescedBlocks.
+
+-03-filtering_groups.py can be run by: python3 03-filtering_groups.py : creates all the relevant dataframes
+
+04-plot_data.py can be run by: python3 04-plot_data.py : outputs the maps showing where the points are.
 
 Required Packages:
 
