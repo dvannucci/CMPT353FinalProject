@@ -10,7 +10,7 @@ Files and how to run them:
 
 -03-filtering_groups.py can be run by: python3 03-filtering_groups.py : creates all the relevant dataframes
 
-04-plot_data.py can be run by: python3 04-plot_data.py : outputs the maps showing where the points are.
+05-plot_data.py can be run by: python3 05-plot_data.py : outputs the maps showing where the points are.
 
 Required Packages:
 
