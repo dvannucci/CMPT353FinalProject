@@ -14,7 +14,7 @@ def distanceCalculate(row, df):
 
 def main():
 
-    listofvalues = ['car','public','bike']
+    listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety','car','public','bike']
 
     for each in listofvalues:
         blocksData = pd.read_json('VancouverBlocks.json.gz', lines=True)
