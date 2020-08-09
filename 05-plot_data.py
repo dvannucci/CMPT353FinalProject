@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import geopandas as gpd
-from sklearn.cluster import KMeans
+
 
 def main():
 
@@ -44,44 +44,41 @@ def main():
     bnd_gdf = gpd.read_file('boundary/local-area-boundary.shp')
     ps_gdf = gpd.read_file('public-streets/public-streets.shp')
 
-    fig, ax = plt.subplots(1, figsize = (16,8))
+    poly = bnd_gdf['geometry']
+
+    poly['coords'] = poly.apply(lambda x: x.representative_point().coords[:])
+    poly['coords'] = [coords[0] for coords in poly['coords']]
+
+    x,y = poly.exterior[0].xy
+
+    fig, ax = plt.subplots(1, figsize = (30,12))
 
     bnd_gdf.plot(ax = ax, color = 'black')
     ps_gdf.plot(ax = ax, color = 'white', alpha = 0.4)
-    plt.scatter(group['lon'],group['lat'], color = 'red')
+    #plt.scatter(group['lon'],group['lat'], color = 'red')
 
-    plt.title('Amenities of\n Vancouver, BC', loc = 'left', fontsize = 20)
+    amen = group['amenity'].unique()
+    for x in amen:
+        agg = group.loc[group['amenity']==x]
+        ax.scatter(agg['lon'],agg['lat'], label = agg['amenity'])
+    plt.legend(labels = amen)
+
+    for i in range(len(poly) - 1):
+        x,y = poly.exterior[i].xy
+        plt.plot(x, y, color='#6699cc', alpha=0.7,
+            linewidth=3, solid_capstyle='round', zorder=2)
+        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow', horizontalalignment='center')
+    
+
+    
+    plt.title('Amenities of\n Vancouver, BC', loc = 'left', fontsize = 40)
 
     ax.axis('off')
 
     plt.show()
 
-    # clustering https://datascience.stackexchange.com/questions/761/clustering-geo-location-coordinates-lat-long-pairs
 
-    arr = [[x,y] for x,y in zip(group['lon'],group['lat'])]
-    X = np.reshape(arr,(int(len(arr)),2))
-    model = KMeans(n_clusters=10)
-    y = model.fit_predict(X)
-
-    fig, ax = plt.subplots(1, figsize = (16,8))
-
-    bnd_gdf.plot(ax = ax, color = 'black')
-    ps_gdf.plot(ax = ax, color = 'white', alpha = 0.4)
-
-    # adapted from https://medium.com/pursuitnotes/k-means-clustering-model-in-6-steps-with-python-35b532cfa8ad
-
-    plt.scatter(X[y==0, 0], X[y == 0, 1], s=100, c='red', label ='Cluster 1')
-    plt.scatter(X[y==1, 0], X[y ==1, 1], s=100, c='blue', label ='Cluster 2')
-    plt.scatter(X[y==2, 0], X[y ==2, 1], s=100, c='green', label ='Cluster 3')
-    plt.scatter(X[y==3, 0], X[y ==3, 1], s=100, c='yellow', label ='Cluster 4')
-    plt.scatter(X[y==4, 0], X[y ==4, 1], s=100, c='orange', label ='Cluster 5')
-    plt.scatter(X[y==5, 0], X[y ==5, 1], s=100, c='cyan', label ='Cluster 6')
-    plt.scatter(X[y==6, 0], X[y ==6, 1], s=100, c='purple', label ='Cluster 7')
-    plt.scatter(X[y==7, 0], X[y ==7, 1], s=100, c='magenta', label ='Cluster 8')
-    plt.scatter(X[y==8, 0], X[y ==8, 1], s=100, c='pink', label ='Cluster 9')
-    plt.scatter(X[y==9, 0], X[y ==9, 1], s=100, c='crimson', label ='Cluster 10')
-    ax.axis('off')
-    plt.show()
+    
 
 if __name__=='__main__':
     main()
