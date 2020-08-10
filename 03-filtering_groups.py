@@ -54,16 +54,16 @@ def main():
     public['type'] = 'public'
     bike['type'] = 'bike'
 
-    nightlife.to_json('nightlife_data.json')
-    fitness.to_json('fitness_data.json')
-    activities.to_json('activities_data.json')
-    leisure.to_json('leisure_data.json')
-    family.to_json('family_data.json')
-    pets.to_json('pets_data.json')
-    safety.to_json('safety_data.json')
-    car.to_json('car_data.json')
-    public.to_json('public_data.json')
-    bike.to_json('bike_data.json')
+    nightlife.to_json('raw_amenities_dataframes/nightlife_data.json')
+    fitness.to_json('raw_amenities_dataframes/fitness_data.json')
+    activities.to_json('raw_amenities_dataframes/activities_data.json')
+    leisure.to_json('raw_amenities_dataframes/leisure_data.json')
+    family.to_json('raw_amenities_dataframes/family_data.json')
+    pets.to_json('raw_amenities_dataframes/pets_data.json')
+    safety.to_json('raw_amenities_dataframes/safety_data.json')
+    car.to_json('raw_amenities_dataframes/car_data.json')
+    public.to_json('raw_amenities_dataframes/public_data.json')
+    bike.to_json('raw_amenities_dataframes/bike_data.json')
 
 if __name__=='__main__':
     main()

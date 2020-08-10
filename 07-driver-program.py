@@ -2,28 +2,45 @@ import pandas as pd
 import numpy as np
 
 def main():
-    pd.set_option('display.max_columns', None)
 
-    print("Please select your most important value in buying a house from the list below,\n-nightlife \n-fitness \n-activities \n-leisure \n-family \n-pets \n-safety")
+    print("Please select three different values in buying a house from the list below,\n-nightlife \n-fitness \n-activities \n-leisure \n-family \n-pets \n-safety")
     listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety']
 
-    value1 = input("Enter your first value: ")
-    value2 = input("Enter your second most important value: ")
-    value3 = input("Lastly, your third most important value: ")
+    while True:
+        value1 = input("Enter your first value: ")
+        if value1 not in listofvalues:
+            print("That is not a value in the list! Try again.")
+            continue
+        else:
+            break
 
-    # included error messages in case typo in input
+    while True:
+        value2 = input("Enter your second most important value: ")
+        if (value2 not in listofvalues or value2 == value1):
+            print("That is not a value in the list, or has already been inputted.")
+            continue
+        else:
+            break
 
-    if(value1 not in listofvalues or value2 not in listofvalues or value3 not in listofvalues):
-        print("ERROR not a value")
-        return
+    while True:
+        value3 = input("Lastly, your third most important value: ")
+        if (value3 not in listofvalues or value3 == value1 or value3 == value2):
+            print("That is not a value in the list, or has already been inputted.")
+            continue
+        else:
+            break
+
 
     print("\nPlease select your primary mode of transportation between, \n-car \n-bike \n-public (as in public transit)")
     listoftransport = ['car','bike','public']
-    transportation = input("Enter main mode of transportation: ")
 
-    if(transportation not in listoftransport):
-        print("ERROR incorrect transportation")
-        return
+    while True:
+        transportation = input("Enter main mode of transportation: ")
+        if(transportation not in listoftransport):
+            print("That is not a value in the list! Try again.")
+            continue
+        else:
+            break
 
     # Read the appropriate dataframes.
     firstdf = pd.read_json('Vancouver_blocks_zscores/' + value1 + '_zscores.json.gz')
@@ -54,11 +71,8 @@ def main():
     index = newframe.score.idxmax()
 
     theRow = newframe.iloc[index]
-    # Print the row with the max score.
-    print(theRow)
-    print('\n\n')
 
-    print("Your ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
+    print("\n\nYour ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
 
 
 if __name__ == '__main__':

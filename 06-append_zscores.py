@@ -24,4 +24,4 @@ for each in listofvalues:
     outputdf = pd.concat([outputdf, tempdf], axis=1)
     outputdf['sum_zscore'] = tempdf.sum(axis=1)
 
-    outputdf.to_json(each + '_zscores.json.gz', compression='gzip')
+    outputdf.to_json('Vancouver_blocks_zscores/' + each + '_zscores.json.gz', compression='gzip')
