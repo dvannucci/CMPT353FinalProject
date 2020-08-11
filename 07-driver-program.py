@@ -73,7 +73,57 @@ def main():
     theRow = newframe.iloc[index]
 
     print("\n\nYour ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
+    
+    con = pd.concat([firstdf,seconddf,thirddf,transportdf])
 
+    con = con[(con['lat']>= 49.2 )&(con['lat'] <= 49.3) & (con['lon'] >= -123.225 )&(con['lon'] <= -123.025)]
+    #con = con.reset_index()
+    
+    bnd_gdf = gpd.read_file('boundary/local-area-boundary.shp')
+    ps_gdf = gpd.read_file('public-streets/public-streets.shp')
+
+    poly = bnd_gdf['geometry']
+    
+    
+    poly['coords'] = poly.apply(lambda x: x.representative_point().coords[:])
+    poly['coords'] = [coords[0] for coords in poly['coords']]
+    
+
+    fig, ax = plt.subplots(1, figsize = (30,12))
+
+    bnd_gdf.plot(ax = ax, color = 'black')
+    ps_gdf.plot(ax = ax, color = 'white', alpha = 0.4)
+    
+
+    amen = con['amenity'].unique()
+    for x in amen:
+        agg = con.loc[con['amenity']==x]
+        ax.scatter(agg['lon'],agg['lat'], label = x)
+    ax.legend()
+    
+    # https://automating-gis-processes.github.io/CSC18/lessons/L4/point-in-polygon.html
+    point = Point(theRow.thePoint[1],theRow.thePoint[0])
+    for i in range(len(poly) - 1):
+        x,y = poly.exterior[i].xy
+        #print(x,y)
+        if poly[i].contains(point):
+            plt.plot(x, y, color='red', alpha=0.7,
+            linewidth=3, solid_capstyle='round', zorder=2)
+            neighbourhoodname = bnd_gdf['name'][i]
+        else:
+            plt.plot(x, y, color='#6699cc', alpha=0.7,
+            linewidth=3, solid_capstyle='round', zorder=2)
+        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow', 
+                     horizontalalignment='center', fontsize = 15)
+        
+    
+    plt.scatter(x = theRow.thePoint[1], y = theRow.thePoint[0], s = 1000,c = 'red',marker = (5,1))
+    
+    plt.title('Amenities of\n Vancouver, BC', loc = 'left', fontsize = 40)
+
+    ax.axis('off')
+    
+    plt.show()
 
 if __name__ == '__main__':
     main()
