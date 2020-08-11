@@ -60,8 +60,8 @@ def main():
     amen = group['amenity'].unique()
     for x in amen:
         agg = group.loc[group['amenity']==x]
-        ax.scatter(agg['lon'],agg['lat'], label = agg['amenity'])
-    plt.legend(labels = amen)
+        ax.scatter(agg['lon'],agg['lat'], label = x)
+    ax.legend()
 
     for i in range(len(poly) - 1):
         x,y = poly.exterior[i].xy
