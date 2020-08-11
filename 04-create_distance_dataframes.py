@@ -26,7 +26,6 @@ def main():
             blocksData[amen + '_distance'] = blocksData.apply(distanceCalculate, df = data, axis = 1)
 
         blocksData.to_json('Vancouver_blocks_amenity_dataframes/' + each + '_blocks.json.gz', compression='gzip')
-        
 
 if __name__=='__main__':
     main()
