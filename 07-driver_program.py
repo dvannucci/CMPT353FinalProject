@@ -6,6 +6,8 @@ from shapely.geometry.polygon import LinearRing, Polygon, Point
 
 def main():
 
+    # Input portion that takes the user's top three important values when buying a house, their primary means of transportation, and their price sensitivity.
+
     print("Please select three different values in buying a house from the list below,\n-nightlife \n-fitness \n-activities \n-leisure \n-family \n-pets \n-safety")
     listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety']
 
@@ -77,27 +79,27 @@ def main():
         old_range = max(df.sum_zscore) - min(df.sum_zscore)
         newframe['score' + str(i)] = (((df.sum_zscore - min(df.sum_zscore)) * new_range) / old_range) + 1
 
-    # Calculation of the weighted score. The values in the exponents, 2, 1.4 and 1.2, were just guesses to be tested out.
-    # https://pubsonline.informs.org/doi/pdf/10.1287/ited.2013.0124
+    # Calculation of the weighted score.
     # Article for multiplicative scoring function with weight.
+    # https://pubsonline.informs.org/doi/pdf/10.1287/ited.2013.0124
     newframe['score'] = 1 / ( (newframe.score1 ** 2.5) * (newframe.score2 ** 2) * (newframe.score3 ** 1.5) * (newframe.score4 ** 2) * (newframe.score5 ** int(priceweight))  )
 
     # Find the index of the row with the max score
     index = newframe.score.idxmax()
 
+    # Find the row with the max score.
     theRow = newframe.iloc[index]
 
-    print(theRow)
-
-    print("\n\nYour ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
+    # Output the optimal living location.
+    print("\n\nYour ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s, and your sensitivity to price." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
 
     listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety','car','public','bike']
-    
+
     group = pd.DataFrame()
-    
+
     for val in listofvalues:
         group = pd.concat([group,pd.read_json('raw_amenities_dataframes/'+val+'_data.json')])
-    
+
     for x in listofvalues:
         if value1 == x:
             firstdf = group[group['type'] == x]
@@ -107,7 +109,7 @@ def main():
             thirddf = group[group['type'] == x]
         if transportation == x:
             transportdf = group[group['type'] == x]
-    
+
     con = pd.concat([firstdf,seconddf,thirddf,transportdf])
 
     con = con[(con['lat']>= 49.2 )&(con['lat'] <= 49.3) & (con['lon'] >= -123.225 )&(con['lon'] <= -123.025)]

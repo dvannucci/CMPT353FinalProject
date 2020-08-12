@@ -6,7 +6,7 @@ from pyspark.sql import SparkSession, functions, types, Row
 
 def main(inputs, output):
     blockData = spark.read.json(inputs)
-    # We are able to do a coalesce because there was approximately 4600 rows in the original data set, and we did a filtering (01-CleanBlockOutlines.py) which removed large blocks from the data. For each row in the original data, we only produced one row in 01-CleanBlockOutlines.py, so there is a maximum of around 4600 rows with 5 columns in this input data.
+    # We are able to do a coalesce because there was approximately 4600 rows in the original data set, and we did a filtering (01-CleanBlockOutlines.py) which removed large blocks from the data. For each row in the original data, we only produced a maximum of one row in 01-CleanBlockOutlines.py, so there is a maximum of around 4600 rows with 5 columns in this data. Unless Vancouver somehow gets a lot more blocks very quickly, this will always be safe for this size data.
     blockData.coalesce(1).write.json(output, mode='overwrite', compression='gzip')
 
 if __name__ == '__main__':

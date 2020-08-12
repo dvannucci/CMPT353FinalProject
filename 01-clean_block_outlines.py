@@ -47,7 +47,6 @@ def main(inputs, output):
         types.StructField('fields', geomType, nullable=False),
         types.StructField('record_timestamp', types.TimestampType(), nullable=True),
         types.StructField('recordid', types.StringType(), nullable=False),
-
     ])
 
 # PROGRAM START
@@ -69,12 +68,10 @@ def main(inputs, output):
 # Seperate the 'repPoint and corners' column into two columns. One with the point called 'thePoint', and one with the corners coordinates called 'coords'.
     blockData = blockData.select('recordid', blockData['repPoint and corners'][0][0].alias('thePoint'), blockData['repPoint and corners'][1].alias('coords'))
 
-# Now we create a new row for every coordinate pair. So every previous row looked like recordid, thePoint, [a bunch of coordinate pairs], now we create a row for each coordinate pair. So the new dataframe will be much longer and will have each row being recordid, thePoint, [lat,lon] for every coordinate pair.
+# Now we create a new row for every coordinate pair. So every previous row looked like "recordid, thePoint, [a bunch of coordinate pairs]", now we create a row for each coordinate pair. So the new dataframe will be much longer and will have each row being recordid, thePoint, [lat,lon] for every coordinate pair.
     blockData = blockData.select('recordid', 'thePoint', functions.explode('coords').alias('coords'))
 # We then call our second udf on every row which return an address for every coordinate pair and calls it 'spots'.
-
     blockData = blockData.select('recordid', 'thePoint', locationFinder(blockData.coords).alias('spots'))
-
 # We now collect each location that cooresponds to the corners of each point and put together into one list with the four found locations.
     groupedData = blockData.groupBy('thePoint').agg(functions.collect_list('spots').alias('spots'))
 # We now seperate the grouped list into four different columns to create the final dataframe. This dataframe will have the first column being the coordinate of the representative point, and the next four columns will be the addresses found by each of the corners coordinates.

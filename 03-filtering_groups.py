@@ -7,8 +7,7 @@ from sklearn.cluster import KMeans
 def main():
     data = pd.read_json('amenities-vancouver.json.gz', lines = True)
 
-    # filtered data based on what amenities we thought were related to each of the values (nightlife, fitness
-    # activities, leisure, family, pets, safety) + transportation
+    # filtered data based on what amenities we thought were related to each of the values (nightlife, fitness, activities, leisure, family, pets, safety) + transportation
 
     nightlife = data[(data['amenity'] == 'pub')|(data['amenity'] == 'bar')|(data['amenity'] == 'restaurant')|
                 (data['amenity'] == 'nightclub')|(data['amenity'] == 'stripclub')|(data['amenity'] == 'gambling')|
@@ -54,6 +53,7 @@ def main():
     public['type'] = 'public'
     bike['type'] = 'bike'
 
+    # Write each dataframe to seperate json file in the folder raw_amenities_dataframes
     nightlife.to_json('raw_amenities_dataframes/nightlife_data.json')
     fitness.to_json('raw_amenities_dataframes/fitness_data.json')
     activities.to_json('raw_amenities_dataframes/activities_data.json')
