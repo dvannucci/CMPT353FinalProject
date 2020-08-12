@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import geopandas as gpd
-from shapely.geometry.polygon import LinearRing, Polygon, Point
+from shapely.geometry import LinearRing, Polygon, Point
 
 def main():
 
