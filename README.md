@@ -12,11 +12,13 @@ Files and how to run them:
 
 -04-create_distance_dataframes.py can be run by: python3 04-create_distance_dataframes.py : This takes the raw_amenities_dataframes from the last step and all the VancouverBlocks.json.gz data, and adds new columns to that dataframe. One new column for the minimum distance from each coordinate point to each relevant amenity for each purchasing value.
 
-05-plot_data.py can be run by: python3 05-plot_data.py : outputs the maps showing where the points are.
+-05-rental_prices_dataframe.py can be run by: python3 05-rental_prices_dataframe.py : This takes the file rental_prices_manual.csv, and creates a dataframe with all points from the Vancouver block data with a new column for rental price's zscores. This is created by taking each point and mapping it to a neighborhood to give an average apartment rental price. These prices are then mapped to a z score and outputted with the original data.
 
 -06-append_zscores.py can be run by: python3 06-append_zscores.py : This program takes the dataframes created from 04-create_distance_dataframes.py, which have the 4 locations, the representative point coordinate and the minimum distance from each coordinate to each relatant entity. The program then calculates the z-score for each amenity column to create a ranking for the distances. It creates a new column for each amenity with the z-scores, and then creates one additional column with the sum of the z-scores for every coordinate. Outputs this data into the directory Vancouver_blocks_zscores.
 
 -07-driver_program.py can be run by: python3 07-driver_program.py : This is the driver program which takes inputs from the user, and outputs the optimal location to look for real estate.
+
+08-plot_data.py can be run by: python3 05-plot_data.py : outputs the maps showing where the points are.
 
 Required libraries commands:
 
