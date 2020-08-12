@@ -17,7 +17,7 @@ def main(inputs, output):
 # Function to take a set of coordinates, and turn it into a polygon object from shapely package.
     def poly(val):
         thePoly = Polygon(val)
-# If the area of the shape is larger than approximately 30,000 m^2, then we will exclude that neighbourhood as it is too large, and most likely a park/not a residential area. The value of 0.0000024 is due to a conversion which will be explained in the document.
+# If the area of the shape is larger than approximately 30,000 m^2, then we will exclude that neighbourhood as it is too large, and most likely a park/not a residential area. The value of 0.0000024 was calculated from a conversion between length in metres, to latitude or longitude degrees. 0.0000024 is roughly equal to 30,000 square metres of area.
         if thePoly.area >= 0.0000024:
             return None
 # Find a representative point within the polygon.
