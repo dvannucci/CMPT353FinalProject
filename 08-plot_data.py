@@ -1,46 +1,44 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 import geopandas as gpd
+import matplotlib.cm as cm
+from shapely.geometry.polygon import LinearRing, Polygon
+import seaborn as sns
 
 
 def main():
 
-    print("List of values in neighbourhood: \n(nightlife, fitness, activities, leisure, family, pets, safety)")
-    listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety']
+    nightlife = pd.read_json('raw_amenities_dataframes/nightlife_data.json')
+    fitness = pd.read_json('raw_amenities_dataframes/fitness_data.json')
+    activities = pd.read_json('raw_amenities_dataframes/activities_data.json')
+    leisure = pd.read_json('raw_amenities_dataframes/leisure_data.json')
+    family = pd.read_json('raw_amenities_dataframes/family_data.json')
+    pets = pd.read_json('raw_amenities_dataframes/pets_data.json')
+    safety = pd.read_json('raw_amenities_dataframes/safety_data.json')
+    car = pd.read_json('raw_amenities_dataframes/car_data.json')
+    public = pd.read_json('raw_amenities_dataframes/public_data.json')
+    bike = pd.read_json('raw_amenities_dataframes/bike_data.json')
 
-    value1 = input("Enter first value: ")
-    value2 = input("Enter second value: ")
-    value3 = input("Enter third value: ")
 
-    # included error messages in case typo in input
+    nightlife['type'] = 'nightlife'
+    fitness['type'] = 'fitness'
+    activities['type'] = 'activities'
+    leisure['type'] = 'leisure'
+    family['type'] = 'family'
+    pets['type'] = 'pets'
+    safety['type'] = 'safety'
+    car['type'] = 'car'
+    public['type'] = 'public'
+    bike['type'] = 'bike'
 
-    if(value1 not in listofvalues or value2 not in listofvalues or value3 not in listofvalues):
-        print("ERROR not a value")
-        return
+    listofvalues = ['family','fitness','activities', 'leisure', 'nightlife', 'pets', 'safety','car','public','bike']
 
-    print("List of transportation: \n(car, bike, public)")
-    listoftransport = ['car','bike','public']
-    transportation = input("Enter main mode of transportation: ")
+    group = pd.concat([family,fitness,activities,leisure,nightlife,pets,safety,car,public,bike])
 
-    if(transportation not in listoftransport):
-        print("ERROR incorrect transportation")
-        return
-
-    firstdf = pd.read_json(value1 + '_data.json')
-    seconddf = pd.read_json(value2 + '_data.json')
-    thirddf = pd.read_json(value3 + '_data.json')
-    transportdf = pd.read_json(transportation + '_data.json')
-
-    # merged the 3 dataframes of the 3 values chosen by user
-
-    group = pd.concat([firstdf,seconddf,thirddf,transportdf])
-
-    # filtered data to just Vancouver, not including Burnaby, Richmond, etc ..
     group = group[(group['lat']>= 49.2 )&(group['lat'] <= 49.3) & (group['lon'] >= -123.225 )&(group['lon'] <= -123.025)]
 
     # adapted from https://medium.com/python-in-plain-english/mapping-with-pythons-geopandas-2869bb758b08
-    # data from https://opendata.vancouver.ca/pages/home/
+
     bnd_gdf = gpd.read_file('boundary/local-area-boundary.shp')
     ps_gdf = gpd.read_file('public-streets/public-streets.shp')
 
@@ -55,19 +53,24 @@ def main():
 
     bnd_gdf.plot(ax = ax, color = 'black')
     ps_gdf.plot(ax = ax, color = 'white', alpha = 0.4)
-    #plt.scatter(group['lon'],group['lat'], color = 'red')
+
+    # https://matplotlib.org/3.3.0/tutorials/colors/colormaps.html
+    # https://stackoverflow.com/questions/12236566/setting-different-color-for-each-series-in-scatter-plot-on-matplotlib
 
     amen = group['amenity'].unique()
-    for x in amen:
+    twcolours = cm.twilight(np.linspace(0, 1, len(amen)))
+
+    for x,colour in zip(amen,twcolours):
         agg = group.loc[group['amenity']==x]
-        ax.scatter(agg['lon'],agg['lat'], label = x)
-    ax.legend()
+        ax.scatter(agg['lon'],agg['lat'], c = colour, label = x)
+    plt.legend()
 
     for i in range(len(poly) - 1):
         x,y = poly.exterior[i].xy
         plt.plot(x, y, color='#6699cc', alpha=0.7,
             linewidth=3, solid_capstyle='round', zorder=2)
-        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow', horizontalalignment='center')
+        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow', 
+                 horizontalalignment='center', fontsize = 15)
     
 
     
@@ -76,9 +79,28 @@ def main():
     ax.axis('off')
 
     plt.show()
-
-
     
+    nightlife = pd.read_json('Vancouver_blocks_amenity_dataframes/nightlife_blocks.json.gz')
+    fitness = pd.read_json('Vancouver_blocks_amenity_dataframes/fitness_blocks.json.gz')
+    activities = pd.read_json('Vancouver_blocks_amenity_dataframes/activities_blocks.json.gz')
+    leisure = pd.read_json('Vancouver_blocks_amenity_dataframes/leisure_blocks.json.gz')
+    family = pd.read_json('Vancouver_blocks_amenity_dataframes/family_blocks.json.gz')
+    pets = pd.read_json('Vancouver_blocks_amenity_dataframes/pets_blocks.json.gz')
+    safety = pd.read_json('Vancouver_blocks_amenity_dataframes/safety_blocks.json.gz')
+    car = pd.read_json('Vancouver_blocks_amenity_dataframes/car_blocks.json.gz')
+    public = pd.read_json('Vancouver_blocks_amenity_dataframes/public_blocks.json.gz')
+    bike = pd.read_json('Vancouver_blocks_amenity_dataframes/bike_blocks.json.gz')
+
+    listofdf = [nightlife,fitness,activities,leisure,family,pets,safety,car,public,bike]
+
+    for df in listofdf:
+        df.drop(columns = ['location1','location2','location3','location4', 'thePoint'], inplace = True)
+        for col in df:
+            sns.kdeplot(df[col], label = col, shade = True)
+            plt.xlabel('Distances')
+            plt.ylabel('Density')
+            plt.title('Density Plot of Minimum '+col+'s')
+            plt.show()
 
 if __name__=='__main__':
     main()
