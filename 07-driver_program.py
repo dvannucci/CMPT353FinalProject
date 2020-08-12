@@ -91,7 +91,24 @@ def main():
 
     print("\n\nYour ideal living location is within the addresses of,\n\n 1. %s \n 2. %s \n 3. %s \n 4. %s.\n\nThis location has the best overall %s, %s, and %s score in that order of importance, while taking into account your primary transportation mode, %s." %(theRow.location1, theRow.location2, theRow.location3, theRow.location4, value1, value2, value3, transportation))
 
-    con = pd.concat([firstdf,seconddf,thirddf,transportdf,pricedf])
+    listofvalues = ['nightlife','fitness','activities', 'leisure', 'family', 'pets', 'safety','car','public','bike']
+    
+    group = pd.DataFrame()
+    
+    for val in listofvalues:
+        group = pd.concat([group,pd.read_json('raw_amenities_dataframes/'+val+'_data.json')])
+    
+    for x in listofvalues:
+        if value1 == x:
+            firstdf = group[group['type'] == x]
+        if value2 == x:
+            seconddf = group[group['type'] == x]
+        if value3 == x:
+            thirddf = group[group['type'] == x]
+        if transportation == x:
+            transportdf = group[group['type'] == x]
+    
+    con = pd.concat([firstdf,seconddf,thirddf,transportdf])
 
     con = con[(con['lat']>= 49.2 )&(con['lat'] <= 49.3) & (con['lon'] >= -123.225 )&(con['lon'] <= -123.025)]
     #con = con.reset_index()
