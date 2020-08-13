@@ -4,6 +4,7 @@ import geopandas as gpd
 import matplotlib.cm as cm
 from shapely.geometry.polygon import LinearRing, Polygon
 import seaborn as sns
+import numpy as np
 
 
 def main():
