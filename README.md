@@ -1,7 +1,7 @@
 # CMPT353FinalProject
 # Group: osm
 # Daniel Vannucci (301291575)
-# Benson Ou-Yang ()
+# Benson Ou-Yang (301277342)
 
 Required libraries commands:
 
@@ -28,7 +28,7 @@ The column gym_distance would be the distance from the coordinate [49.1, -123.2]
 
 -07-driver_program.py can be run by: python3 07-driver_program.py : This is the driver program which takes inputs from the user, calculates the optimal real estate location based on the user's preferences, and outputs this data along with a map of the location.
 
-08-plot_data.py can be run by: python3 08-plot_data.py : outputs the maps showing where the locations are.
+08-plot_data.py can be run by: python3 08-plot_data.py : outputs the map showing all the amenities of Vancouver and density plots of all the minimum distances of amenities to each locations.
 
 Each values relevant amenities:
 
