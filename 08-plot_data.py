@@ -45,8 +45,8 @@ def main():
 
     poly = bnd_gdf['geometry']
 
-    poly['coords'] = poly.apply(lambda x: x.representative_point().coords[:])
-    poly['coords'] = [coords[0] for coords in poly['coords']]
+    locations = poly.apply(lambda x: x.representative_point().coords[:])
+    locations = [coords[0] for coords in locations]
 
     x,y = poly.exterior[0].xy
 
@@ -70,17 +70,17 @@ def main():
         x,y = poly.exterior[i].xy
         plt.plot(x, y, color='#6699cc', alpha=0.7,
             linewidth=3, solid_capstyle='round', zorder=2)
-        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow', 
+        plt.annotate(s = bnd_gdf['name'][i], xy = locations[i], c = 'yellow',
                  horizontalalignment='center', fontsize = 15)
-    
 
-    
+
+
     plt.title('Amenities of\n Vancouver, BC', loc = 'left', fontsize = 40)
 
     ax.axis('off')
 
     plt.show()
-    
+
     nightlife = pd.read_json('Vancouver_blocks_amenity_dataframes/nightlife_blocks.json.gz')
     fitness = pd.read_json('Vancouver_blocks_amenity_dataframes/fitness_blocks.json.gz')
     activities = pd.read_json('Vancouver_blocks_amenity_dataframes/activities_blocks.json.gz')

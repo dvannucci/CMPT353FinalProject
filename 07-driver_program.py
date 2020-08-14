@@ -120,10 +120,8 @@ def main():
 
     poly = bnd_gdf['geometry']
 
-
-    poly['coords'] = poly.apply(lambda x: x.representative_point().coords[:])
-    poly['coords'] = [coords[0] for coords in poly['coords']]
-
+    locations = poly.apply(lambda x: x.representative_point().coords[:])
+    locations = [coords[0] for coords in locations]
 
     fig, ax = plt.subplots(1, figsize = (30,12))
 
@@ -149,7 +147,7 @@ def main():
         else:
             plt.plot(x, y, color='#6699cc', alpha=0.7,
             linewidth=3, solid_capstyle='round', zorder=2)
-        plt.annotate(s = bnd_gdf['name'][i], xy = poly['coords'][i], c = 'yellow',
+        plt.annotate(s = bnd_gdf['name'][i], xy = locations[i], c = 'yellow',
                      horizontalalignment='center', fontsize = 15)
 
 
